@@ -1,5 +1,8 @@
 {
   "api":{
     "port": "2123"
+  },
+  "collection": {
+    "USERS": "users"
   }
 }

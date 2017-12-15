@@ -12,6 +12,7 @@
     "config": "^1.28.1",
     "koa": "^2.4.1",
     "koa-body": "^2.5.0",
-    "koa-router": "^7.3.0"
+    "koa-router": "^7.3.0",
+    "mongoose": "^4.13.7"
   }
 }

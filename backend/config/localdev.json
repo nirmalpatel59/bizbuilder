@@ -4,5 +4,11 @@
   },
   "collection": {
     "USERS": "users"
+  },
+  "database": {
+    "uri": "mongodb://localhost/bizBuilderDB",
+    "options": {
+      "useMongoClient": true
+    }
   }
 }

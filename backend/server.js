@@ -3,7 +3,7 @@ let app = new Koa()
 let koaBody = require('koa-body')
 let config = require('config')
 let router = require('./router')
-
+require('./connection')
 app.use(koaBody({
   multipart: true,
   formidable: {}

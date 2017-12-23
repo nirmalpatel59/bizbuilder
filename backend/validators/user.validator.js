@@ -1,6 +1,6 @@
 let validator = require('validator')
 
-let userValidator = function(reqBody) {
+module.exports.userValidator = function(reqBody) {
     let status, message, data;
     if(!validator.isEmail(reqBody.email)) {
         status = false
@@ -17,7 +17,7 @@ let userValidator = function(reqBody) {
     } else {
         status = true,
         message = '',
-        data = reqBody
+        data = requestParser("getUser", reqBody);
     }
     return {
         status: status,
@@ -26,6 +26,30 @@ let userValidator = function(reqBody) {
     }
 }
 
-module.exports = {
-    userValidator: userValidator
+module.exports.getUserValidation = function (reqBody) {
+    let status, message, data
+    if(validator.isEmpty(reqBody.username)) {
+        status = false,
+        message = "Username can not be empty."
+    } else {
+        status = true,
+        message = "",
+        data = reqBody
+    }
+    return {
+        status: status,
+        message: message,
+        data: data
+    }
+}
+
+
+let requestParser = function (reqType, reqBody) {
+    let tempReqBody = JSON.parse(JSON.stringify(reqBody))
+    switch(reqType) {
+        case "getUser":
+            tempReqBody.username = tempReqBody.email
+        break
+    }
+    return tempReqBody
 }

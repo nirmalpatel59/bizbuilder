@@ -1,3 +1,4 @@
+let config = require('config')
 let jwt = require('jsonwebtoken')
 
 module.exports = function () {
@@ -7,7 +8,12 @@ module.exports = function () {
         if(!token) {
             ctx.throw('Authentication required', 401)
         }
-        let jwtDecode = jwt.verify(config.auth.secret)
+        let jwtDecode
+        try{
+            jwtDecode = jwt.verify(token, config.auth.secretKey)
+        } catch (exception) {
+            ctx.throw('Authentication failed', 401)
+        }
         ctx.auth = jwtDecode
         await next()
     }

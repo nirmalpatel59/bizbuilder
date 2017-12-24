@@ -1,17 +1,21 @@
-let validator = require('validator')
 let commonValidator = require('./common')
-module.exports.userValidator = function(reqBody) {
+let validator = require('validator')
+
+module.exports.signUpValidation = function (reqBody) {
     return commonValidator.UserDataValidation(reqBody)
 }
 
-module.exports.getUserValidation = function (reqBody) {
+module.exports.signInValidation = function (reqBody) {
     let status, message, data
     if(validator.isEmpty(reqBody.username)) {
         status = false,
-        message = "Username can not be empty."
+        message = 'Username can not be empty'
+    } else if(validator.isEmpty(reqBody.password)) {
+        status = false,
+        message = 'Passowrd can not be empty'
     } else {
         status = true,
-        message = "",
+        message = '',
         data = reqBody
     }
     return {

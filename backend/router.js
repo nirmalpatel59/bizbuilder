@@ -3,6 +3,7 @@ let compose = require('koa-compose')
 
 let auth = require('./middlewares/auth')
 let userController = require('./controllers').userController
+let authController = require('./controllers').authController
 
 module.exports = function () {
   let pubRouter = new Router()
@@ -12,8 +13,12 @@ module.exports = function () {
   priRouter.pst = priRouter.post
   
   pubRouter.get('/alive', ctx => { ctx.body = 'Hello alive!!!' })
+
+  pubRouter.pst('/signUp', authController.signUp)
+  pubRouter.pst('/signIn', authController.signIn)
+
   priRouter.get('/users', userController.getUser)
-  pubRouter.pst('/users', userController.saveUser)
+  priRouter.pst('/users', userController.saveUser)
 
   return compose([
     pubRouter.routes(),

@@ -1,2 +1,2 @@
-let userController = require('./user.controller')
-module.exports.userController = userController
+module.exports.userController = require('./user.controller')
+module.exports.authController = require('./auth.controller')

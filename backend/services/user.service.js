@@ -6,6 +6,20 @@ module.exports.saveUser = async function(userInstance) {
     try{
         userData = await userSchema.save()
     } catch(exception) {
+        console.log(exception)
+        userData = {
+            "error": true,
+            "errorData": exception 
+        }
+    }
+    return userData
+}
+
+module.exports.getUser = async function(query) {
+    let userData
+    try {
+        userData = await UserModel.findOne(query)
+    } catch(exception) {
         userData = {
             "error": true
         }
@@ -13,7 +27,7 @@ module.exports.saveUser = async function(userInstance) {
     return userData
 }
 
-module.exports.getUser = async function(username) {
+module.exports.signIn = async function() {
     let userData
     try {
         userData = await UserModel.findOne({"username": username})
@@ -23,4 +37,4 @@ module.exports.getUser = async function(username) {
         }
     }
     return userData
-}
+} 

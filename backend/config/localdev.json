@@ -5,6 +5,10 @@
   "collection": {
     "USERS": "users"
   },
+  "auth": {
+    "secretKey": "mysecretkey",
+    "expiryTime": 3600
+  },
   "database": {
     "uri": "mongodb://localhost/bizBuilderDB",
     "options": {

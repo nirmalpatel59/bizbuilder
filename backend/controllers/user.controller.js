@@ -26,9 +26,9 @@ let saveUser = async function(ctx) {
 }
 
 let getUser = async function(ctx) {
-    let reqBody = validate.getUserValidation(ctx.request.query);
+    let reqBody = validate.getUserValidation(ctx.request.query)
     if(reqBody.status) {
-        let serviceRes = await userService.getUser(reqBody.data.username)
+        let serviceRes = await userService.getUser({ "username": reqBody.data.username })
         if(serviceRes && serviceRes.error) {
             ctx.body = {
                 status: 500,

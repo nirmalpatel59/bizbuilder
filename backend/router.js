@@ -2,6 +2,7 @@ let Router = require('koa-router')
 let compose = require('koa-compose')
 
 let auth = require('./middlewares/auth')
+let error = require('./middlewares/error')
 let userController = require('./controllers').userController
 let authController = require('./controllers').authController
 
@@ -23,6 +24,7 @@ module.exports = function () {
   priRouter.del('/users', userController.deleteUser)
 
   return compose([
+    error(),
     pubRouter.routes(),
     pubRouter.allowedMethods(),
     auth(),

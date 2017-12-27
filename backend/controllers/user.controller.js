@@ -12,17 +12,10 @@ let saveUser = async function (ctx) {
       }
     } else {
       let serviceRes = await userService.saveUser(reqBody.data)
-      if (serviceRes.error) {
-        ctx.body = {
-          status: 500,
-          meesage: 'Internal server error'
-        }
-      } else {
-        ctx.body = {
-          data: serviceRes,
-          status: 200,
-          message: 'User successfully created'
-        }
+      ctx.body = {
+        data: serviceRes,
+        status: 200,
+        message: 'User successfully created'
       }
     }
   } else {
@@ -84,7 +77,30 @@ let updateUser = async function (ctx) {
 }
 
 let deleteUser = async function (ctx) {
+  let username
+  if (ctx.query.username) username = ctx.query.username
+  else username = ctx.auth.username
 
+  if (username) {
+    let serviceRes = await userService.deleteUser({ 'username': username })
+    if (serviceRes.error) {
+      ctx.body = {
+        status: 500,
+        message: 'Internal server error'
+      }
+    } else {
+      ctx.body = {
+        data: serviceRes,
+        status: 200,
+        message: 'User successfully deleted'
+      }
+    }
+  } else {
+    ctx.body = {
+      status: 900,
+      message: 'User not found'
+    }
+  }
 }
 module.exports = {
   saveUser: saveUser,

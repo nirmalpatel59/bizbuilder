@@ -1,8 +1,8 @@
 let commonValidator = require('./common')
 let validator = require('validator')
 
-module.exports.signUpValidation = function (reqBody) {
-  return commonValidator.UserDataValidation(reqBody)
+module.exports.signUpValidation = function (reqBody, reqType) {
+  return commonValidator.UserDataValidation(reqBody, reqType)
 }
 
 module.exports.signInValidation = function (reqBody) {

@@ -1,6 +1,6 @@
 let validator = require('validator')
 
-module.exports.UserDataValidation = function (reqBody) {
+module.exports.UserDataValidation = function (reqBody, reqType) {
   let status, message, data
   if (!validator.isEmail(reqBody.email)) {
     status = false
@@ -17,7 +17,7 @@ module.exports.UserDataValidation = function (reqBody) {
   } else {
     status = true
     message = ''
-    data = requestParser('saveUser', reqBody)
+    data = requestParser(reqBody, reqType)
   }
   return {
     status: status,
@@ -26,7 +26,7 @@ module.exports.UserDataValidation = function (reqBody) {
   }
 }
 
-let requestParser = function (reqType, reqBody) {
+let requestParser = function (reqBody, reqType) {
   let tempReqBody = JSON.parse(JSON.stringify(reqBody))
   switch (reqType) {
     case 'saveUser':

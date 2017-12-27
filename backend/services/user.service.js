@@ -26,3 +26,15 @@ module.exports.getUser = async function (query) {
   }
   return userData
 }
+
+module.exports.updateUser = async function (selector, userInstance) {
+  let userData
+  try {
+    userData = await UserModel.findOneAndUpdate(selector, userInstance, { new: true })
+  } catch (exception) {
+    userData = {
+      'error': true
+    }
+  }
+  return userData
+}

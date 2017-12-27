@@ -1,7 +1,7 @@
 let validator = require('validator')
 let commonValidator = require('./common')
-module.exports.userValidator = function (reqBody) {
-  return commonValidator.UserDataValidation(reqBody)
+module.exports.userValidator = function (reqBody, reqType) {
+  return commonValidator.UserDataValidation(reqBody, reqType)
 }
 
 module.exports.getUserValidation = function (reqBody) {
@@ -14,6 +14,26 @@ module.exports.getUserValidation = function (reqBody) {
     message = ''
     data = reqBody
   }
+  return {
+    status: status,
+    message: message,
+    data: data
+  }
+}
+
+module.exports.updateUserValidator = function (reqBody) {
+  let status = true
+  let message = ''
+  let data = reqBody
+  for (var key in reqBody) {
+    if (validator.isEmpty(reqBody[key])) {
+      status = false
+      message = key + ' can not be empty'
+      data = ''
+      break
+    }
+  }
+
   return {
     status: status,
     message: message,

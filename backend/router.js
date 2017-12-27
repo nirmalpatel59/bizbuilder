@@ -8,10 +8,10 @@ let authController = require('./controllers').authController
 module.exports = function () {
   let pubRouter = new Router()
   let priRouter = new Router()
-  
+
   pubRouter.pst = pubRouter.post
   priRouter.pst = priRouter.post
-  
+
   pubRouter.get('/alive', ctx => { ctx.body = 'Hello alive!!!' })
 
   pubRouter.pst('/signUp', authController.signUp)
@@ -19,6 +19,8 @@ module.exports = function () {
 
   priRouter.get('/users', userController.getUser)
   priRouter.pst('/users', userController.saveUser)
+  priRouter.put('/users', userController.updateUser)
+  priRouter.del('/users', userController.deleteUser)
 
   return compose([
     pubRouter.routes(),

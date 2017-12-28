@@ -7,37 +7,16 @@ module.exports.saveUser = async function (userInstance) {
 }
 
 module.exports.getUser = async function (query) {
-  let userData
-  try {
-    userData = await UserModel.findOne(query)
-  } catch (exception) {
-    userData = {
-      'error': true
-    }
-  }
+  let userData = await UserModel.findOne(query)
   return userData
 }
 
 module.exports.updateUser = async function (selector, userInstance) {
-  let userData
-  try {
-    userData = await UserModel.findOneAndUpdate(selector, userInstance, { new: true })
-  } catch (exception) {
-    userData = {
-      'error': true
-    }
-  }
+  let userData = await UserModel.findOneAndUpdate(selector, userInstance, { new: true })
   return userData
 }
 
 module.exports.deleteUser = async function (selector) {
-  let userData
-  try {
-    userData = await UserModel.findOneAndRemove(selector)
-  } catch (exception) {
-    userData = {
-      'error': true
-    }
-  }
+  let userData = await UserModel.findOneAndRemove(selector)
   return userData
 }

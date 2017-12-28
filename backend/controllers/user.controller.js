@@ -30,23 +30,16 @@ let getUser = async function (ctx) {
   let reqBody = validate.getUserValidation(ctx.request.query)
   if (reqBody.status) {
     let serviceRes = await userService.getUser({ 'username': reqBody.data.username })
-    if (serviceRes && serviceRes.error) {
-      ctx.body = {
-        status: 500,
-        message: 'Internal server error'
-      }
-    } else {
-      let message = ''
-      if (serviceRes === null) message = 'No user found'
-      ctx.body = {
-        data: serviceRes,
-        status: 200,
-        message: message
-      }
+    let message = ''
+    if (serviceRes === null) message = 'No user found'
+    ctx.body = {
+      data: serviceRes,
+      status: 200,
+      message: message
     }
   } else {
     ctx.body = {
-      status: 500,
+      status: 900,
       message: 'Validation failed'
     }
   }
@@ -56,17 +49,10 @@ let updateUser = async function (ctx) {
   let reqBody = await validate.updateUserValidator(ctx.request.body, 'updateUser')
   if (reqBody.status) {
     let serviceRes = await userService.updateUser({ 'username': ctx.auth.username }, reqBody.data)
-    if (serviceRes.error) {
-      ctx.body = {
-        status: 500,
-        message: 'Internal server error'
-      }
-    } else {
-      ctx.body = {
-        data: serviceRes,
-        status: 200,
-        message: 'User successfully updated'
-      }
+    ctx.body = {
+      data: serviceRes,
+      status: 200,
+      message: 'User successfully updated'
     }
   } else {
     ctx.body = {
@@ -83,17 +69,10 @@ let deleteUser = async function (ctx) {
 
   if (username) {
     let serviceRes = await userService.deleteUser({ 'username': username })
-    if (serviceRes.error) {
-      ctx.body = {
-        status: 500,
-        message: 'Internal server error'
-      }
-    } else {
-      ctx.body = {
-        data: serviceRes,
-        status: 200,
-        message: 'User successfully deleted'
-      }
+    ctx.body = {
+      data: serviceRes,
+      status: 200,
+      message: 'User successfully deleted'
     }
   } else {
     ctx.body = {
@@ -102,6 +81,7 @@ let deleteUser = async function (ctx) {
     }
   }
 }
+
 module.exports = {
   saveUser: saveUser,
   getUser: getUser,

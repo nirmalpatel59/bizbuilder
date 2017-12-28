@@ -11,8 +11,8 @@ module.exports = function (app) {
       ctx.status = err.status
 
       ctx.body = {
-        status: false,
-        error: ctx.err.message,
+        status: 500,
+        error: ctx.err.message || 'Internal server error',
         errors: ctx.errors && Object.keys(err.errors).map(function (key) {
           return key + ': ' + err.errors[key].message
         })

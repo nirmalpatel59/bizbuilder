@@ -18,6 +18,8 @@ module.exports = function () {
   pubRouter.pst('/signUp', authController.signUp)
   pubRouter.pst('/signIn', authController.signIn)
 
+  pubRouter.pst('/oauth/google', authController.oAuthSignup)
+
   priRouter.get('/users', userController.getUser)
   priRouter.pst('/users', userController.saveUser)
   priRouter.put('/users', userController.updateUser)

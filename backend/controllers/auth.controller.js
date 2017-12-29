@@ -1,8 +1,27 @@
 let jwt = require('jsonwebtoken')
 let config = require('config')
+let google = require('googleapis')
+let oAuth2 = google.auth.oAuth2
 
 let userService = require('../services/user.service')
 let authValidator = require('../validators/auth.validator')
+
+module.exports.oAuthSignup = async function (ctx) {
+  let oauth2Client = oAuth2({
+    clientID: '',
+    clientSecret: '',
+    RedirectURL: ''
+  })
+  let scopes = [
+    'https://www.googleapis.com/auth/userinfo.email',
+    'https://www.googleapis.com/auth/userinfo.profile'
+  ]
+
+  let url = oauth2Client.generateAuthUrl({
+    access_typ: 'offline',
+    scope: scopes
+  })
+}
 
 module.exports.signUp = async function (ctx) {
   let reqBody = await authValidator.signUpValidation(ctx.request.body)

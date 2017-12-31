@@ -9,6 +9,7 @@
   "author": "Nirmal Patel",
   "license": "ISC",
   "dependencies": {
+    "asyncy": "0.0.4",
     "config": "^1.28.1",
     "googleapis": "^23.0.0",
     "jsonwebtoken": "^8.1.0",

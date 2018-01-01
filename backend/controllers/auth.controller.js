@@ -1,7 +1,6 @@
 let jwt = require('jsonwebtoken')
 let config = require('config')
 let google = require('googleapis')
-let asyncy = require('asyncy')
 let plus = google.plus('v1')
 let OAuth2 = google.auth.OAuth2
 let oauth2Client = new OAuth2(
@@ -36,45 +35,38 @@ module.exports.generateGoogleSignupCode = async function (ctx) {
 
 module.exports.getOAuthToken = async function (ctx) {
   let code = ctx.request.body.code
-  let { err, token, args } = await asyncy.inline(oauth2Client.getToken, code)
-  if (err) {
-    console.log(err)
-    console.log(args)
-    ctx.body = {
-      'error': err
-    }
-  } else {
-    oauth2Client.credentials = token
-    let { errPro, profile, args } = await asyncy.inline(plus.people.get({ userId: 'me', auth: oauth2Client }))
-    console.log(errPro)
-    console.log(profile)
-    console.log(args)
-    if (errPro) {
-      ctx.body = {
-        err: errPro
-      }
-    } else {
-      ctx.body = {
-        data: profile
-      }
-    }
+  let tokens = await getTokensFromAuthorizeCode(code)
+  oauth2Client.credentials = tokens
+  let profile = await getProfilefromAccessToken(tokens)
+  ctx.body = {
+    data: profile
   }
+}
 
-  // oauth2Client.getToken(code, function (err, token) {
-  //   if (err) {
-  //   } else {
-  //     plus.people.get({ userId: 'me', auth: oauth2Client }, function (err, profile) {
-  //       if (err) {
-  //         return console.log('An error occured', err)
-  //       }
-  //       console.log(profile)
-  //       ctx.body = {
-  //         data: profile
-  //       }
-  //     })
-  //   }
-  // })
-  // let profile = plus.people.get({ userId: 'me', auth: oauth2Client })
+function getTokensFromAuthorizeCode (code) {
+  return new Promise(function (resolve, reject) {
+    oauth2Client.getToken(code, function (err, token) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(token)
+      }
+    })
+  })
+}
+
+function getProfilefromAccessToken (tokens) {
+  return new Promise(function (resolve, reject) {
+    plus.people.get({ userId: 'me', auth: oauth2Client }, function (err, profile) {
+      if (err) {
+        console.log('An error occured', err)
+        reject(err)
+      } else {
+        console.log(profile)
+        resolve(profile)
+      }
+    })
+  })
 }
 
 module.exports.signUp = async function (ctx) {

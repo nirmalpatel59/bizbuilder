@@ -37,7 +37,9 @@ module.exports.getOAuthToken = async function (ctx) {
   let code = ctx.request.body.code
   let tokens = await getTokensFromAuthorizeCode(code)
   oauth2Client.credentials = tokens
-  let profile = await getProfilefromAccessToken(tokens)
+  let profile = await getProfileFromAccessToken(tokens)
+  // let serviceRes = await userService.saveUser()
+
   ctx.body = {
     data: profile
   }
@@ -55,7 +57,7 @@ function getTokensFromAuthorizeCode (code) {
   })
 }
 
-function getProfilefromAccessToken (tokens) {
+function getProfileFromAccessToken (tokens) {
   return new Promise(function (resolve, reject) {
     plus.people.get({ userId: 'me', auth: oauth2Client }, function (err, profile) {
       if (err) {

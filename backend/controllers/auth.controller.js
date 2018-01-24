@@ -38,10 +38,25 @@ module.exports.getOAuthToken = async function (ctx) {
   let tokens = await getTokensFromAuthorizeCode(code)
   oauth2Client.credentials = tokens
   let profile = await getProfileFromAccessToken(tokens)
-  // let serviceRes = await userService.saveUser()
 
+  let profileObj = {
+    username: profile.emails[0].value,
+    firstName: profile.name.givenName,
+    lastName: profile.name.familyName,
+    email: profile.emails[0].value,
+    accountType: 'Google'
+  }
+
+  let serviceRes = await userService.saveUser(profileObj)
+
+  let authToken = await jwt.sign(serviceRes.toJSON(), config.auth.secretKey, { expiresIn: config.auth.expiryTime })
   ctx.body = {
-    data: profile
+    status: 200,
+    message: 'Successfully signIn',
+    data: {
+      username: serviceRes.username,
+      authToken: authToken
+    }
   }
 }
 
@@ -64,7 +79,6 @@ function getProfileFromAccessToken (tokens) {
         console.log('An error occured', err)
         reject(err)
       } else {
-        console.log(profile)
         resolve(profile)
       }
     })
@@ -108,7 +122,7 @@ module.exports.signIn = async function (ctx) {
     } else if (serviceRes.password !== reqBody.data.password) {
       message = 'Invalid Password'
     } else {
-      let authToken = await jwt.sign(serviceRes.toJSON(), config.auth.secretKey, {expiresIn: config.auth.expiryTime})
+      let authToken = await jwt.sign(serviceRes.toJSON(), config.auth.secretKey, { expiresIn: config.auth.expiryTime })
       message = 'Successfully signIn'
       data = {
         username: serviceRes.username,
